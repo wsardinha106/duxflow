@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+:root {
+  --fundo: #f6f6f8;
+  --superficie: #ffffff;
+  --texto: #18181b;
+  --suave: #71717a;
+  --borda: #e4e4e7;
+  --marca: #db2777;
+}
+
+@theme inline {
+  --color-fundo: var(--fundo);
+  --color-superficie: var(--superficie);
+  --color-texto: var(--texto);
+  --color-suave: var(--suave);
+  --color-borda: var(--borda);
+  --color-marca: var(--marca);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+html,
+body {
+  background: var(--fundo);
+  color: var(--texto);
+  overflow-x: hidden;
+}
+
+/* Esconde a barra de rolagem do carrossel sem perder a rolagem. */
+.sem-barra {
+  scrollbar-width: none;
+}
+.sem-barra::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes entrar-direita {
+  from { transform: translateX(24px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+@keyframes subir {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.anim-painel { animation: entrar-direita 0.18s ease-out; }
+.anim-subir { animation: subir 0.18s ease-out; }
