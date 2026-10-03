@@ -6,6 +6,8 @@
  * divergirem — ao mudar aqui, mude lá também.
  */
 export const CLIENTE = {
+  /** Nome do painel na barra superior. */
+  marca: "DuxFlow",
   nome: "Nome do cliente",
   instagram: "@cliente",
   urlProducao: "https://cliente.vercel.app",

@@ -51,7 +51,7 @@ export function Conexoes() {
   return (
     <div className="flex max-w-2xl flex-col gap-5">
       <div>
-        <h1 className="text-xl font-bold md:text-2xl">Conexões</h1>
+        <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">Conexões</h1>
         <p className="text-sm text-zinc-500">Conta do Instagram onde os conteúdos são publicados.</p>
       </div>
 

@@ -75,6 +75,14 @@ export async function listarPendentes(): Promise<Conteudo[]> {
   return lerTudo((a, b) => db().from(TABELA).select("*").eq("status", "pendente").order("data_agendada").order("id").range(a, b));
 }
 
+/** Todos os itens de um status: os que ainda vão sair primeiro; publicados do mais recente. */
+export async function listarPorStatus(status: Status): Promise<Conteudo[]> {
+  const recentesPrimeiro = status === "publicado" || status === "descartado";
+  return lerTudo((a, b) =>
+    db().from(TABELA).select("*").eq("status", String(status)).order("data_agendada", { ascending: !recentesPrimeiro }).order("id").range(a, b),
+  );
+}
+
 export async function contarPorStatus(): Promise<Record<Status, number>> {
   const status: Status[] = ["pendente", "agendado", "publicando", "publicado", "erro", "descartado"];
   const r = {} as Record<Status, number>;
@@ -266,6 +274,7 @@ export async function desconectar(): Promise<StatusConexao> {
 export const OPS = {
   listarConteudos,
   listarPendentes,
+  listarPorStatus,
   contarPorStatus,
   obterConteudo,
   aprovar,

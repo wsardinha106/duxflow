@@ -37,7 +37,7 @@ export function Fila() {
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold md:text-2xl">Fila de aprovação</h1>
+          <h1 className="text-2xl font-extrabold tracking-tight md:text-3xl">Fila de aprovação</h1>
           <p className="text-sm text-zinc-500">{itens ? `${itens.length} pendente(s)` : "Carregando…"}</p>
         </div>
         {!!itens?.length && (
@@ -90,7 +90,7 @@ function CardFila({ c, ocupado, aoAprovar, aoEditar, aoDescartar }: { c: Conteud
   const [aberta, setAberta] = useState(false);
   const { visivel, resto } = cortarNoMais(c.descricao);
   return (
-    <article className="flex min-w-0 flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white">
+    <article className="flex min-w-0 flex-col overflow-hidden rounded-3xl border border-zinc-200 bg-white shadow-sm">
       <div className="bg-zinc-100">
         {c.tipo === "reel" ? (
           <div className="mx-auto max-w-[280px]">

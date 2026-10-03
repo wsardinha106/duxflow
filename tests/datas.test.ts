@@ -44,20 +44,21 @@ export default suite("Datas em Brasília e grades", (t) => {
     assert.equal(somarDias("2026-03-01", -1), "2026-02-28");
   });
   t("grade do mês: semanas completas, domingo a sábado", () => {
-    const g = gradeMes(2026, 3); // março/2026 começa num domingo
+    const g = gradeMes(2026, 3); // março/2026 começa num domingo → semana desde 23/02
     assert.equal(g.length % 7, 0);
-    assert.equal(g[0].chave, "2026-03-01");
+    assert.equal(g[0].chave, "2026-02-23");
     assert.equal(g.filter((d) => d.doMes).length, 31);
-    const fev = gradeMes(2026, 2); // fev/2026: 1º é domingo, 28 dias
-    assert.equal(fev.length, 28);
+    const jun = gradeMes(2026, 6); // jun/2026: 1º é segunda, 30 dias, termina na terça
+    assert.equal(jun[0].chave, "2026-06-01");
+    assert.equal(jun.length, 35);
     const out = gradeMes(2026, 10); // out/2026: 1º é quinta
-    assert.equal(out[0].chave, "2026-09-27");
+    assert.equal(out[0].chave, "2026-09-28");
     assert.equal(out[0].doMes, false);
     assert.equal(out.length, 35);
   });
   t("grade da semana", () => {
     assert.deepEqual(gradeSemana("2026-10-02"), [
-      "2026-09-27", "2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03",
+      "2026-09-28", "2026-09-29", "2026-09-30", "2026-10-01", "2026-10-02", "2026-10-03", "2026-10-04",
     ]);
   });
   t("intervalo UTC cobre o último dia inteiro", () => {

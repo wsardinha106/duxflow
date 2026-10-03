@@ -36,3 +36,10 @@ export const IconeLink = (p: P) => (
 export const IconeImagem = (p: P) => (
   <svg {...base(p)}><rect x="3" y="4" width="18" height="16" rx="2" /><circle cx="9" cy="10" r="1.8" /><path d="m21 16-5-5-9 9" /></svg>
 );
+export const IconeMenu = (p: P) => (
+  <svg {...base(p)}><path d="M4 7h16M4 12h16M4 17h16" /></svg>
+);
+/** Marca do painel: um fluxo que vira seta. */
+export const IconeMarca = (p: P) => (
+  <svg {...base(p)} strokeWidth={2.4}><path d="M4 7h9a4 4 0 0 1 0 8H7" /><path d="m10 12-3 3 3 3" /></svg>
+);

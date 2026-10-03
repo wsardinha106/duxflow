@@ -144,13 +144,18 @@ export interface DiaDaGrade {
   doMes: boolean;
 }
 
-/** Grade do mês (domingo a sábado), sempre com semanas completas. */
+/** Posição na semana começando na segunda (0 = segunda … 6 = domingo). */
+function posicaoNaSemana(chave: ChaveDia): number {
+  return (diaDaSemana(chave) + 6) % 7;
+}
+
+/** Grade do mês (segunda a domingo), sempre com semanas completas. */
 export function gradeMes(ano: number, mes: number): DiaDaGrade[] {
   const primeiro = `${ano}-${dois(mes)}-01`;
-  const inicio = somarDias(primeiro, -diaDaSemana(primeiro));
+  const inicio = somarDias(primeiro, -posicaoNaSemana(primeiro));
   const diasNoMes = new Date(Date.UTC(ano, mes, 0)).getUTCDate();
   const ultimo = `${ano}-${dois(mes)}-${dois(diasNoMes)}`;
-  const fim = somarDias(ultimo, 6 - diaDaSemana(ultimo));
+  const fim = somarDias(ultimo, 6 - posicaoNaSemana(ultimo));
   const dias: DiaDaGrade[] = [];
   for (let c = inicio; c <= fim; c = somarDias(c, 1)) {
     const p = partesDaChave(c);
@@ -159,9 +164,9 @@ export function gradeMes(ano: number, mes: number): DiaDaGrade[] {
   return dias;
 }
 
-/** Os 7 dias (domingo a sábado) da semana que contém `chave`. */
+/** Os 7 dias (segunda a domingo) da semana que contém `chave`. */
 export function gradeSemana(chave: ChaveDia): ChaveDia[] {
-  const inicio = somarDias(chave, -diaDaSemana(chave));
+  const inicio = somarDias(chave, -posicaoNaSemana(chave));
   return Array.from({ length: 7 }, (_, i) => somarDias(inicio, i));
 }
 
@@ -175,3 +180,5 @@ export const NOMES_MES = [
   "julho", "agosto", "setembro", "outubro", "novembro", "dezembro",
 ];
 export const NOMES_DIA_CURTO = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
+/** Cabeçalho das grades, na ordem em que aparecem (segunda primeiro). */
+export const NOMES_DIA_GRADE = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
