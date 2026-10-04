@@ -121,9 +121,10 @@ export default suite("Invariantes (leitura de código)", (t) => {
     assert.match(rota, /status: 404/);
   });
 
-  t("proxy libera só /login, /auth/* e o cron", () => {
+  t("proxy libera só /login, /privacidade, /auth/* e o cron", () => {
     const proxy = ler("src/proxy.ts");
     assert.match(proxy, /pathname === "\/login"/);
+    assert.match(proxy, /pathname === "\/privacidade"/);
     assert.match(proxy, /startsWith\("\/auth\/"\)/);
     assert.match(proxy, /"\/api\/cron\/publicar"/);
   });

@@ -10,6 +10,8 @@ export const CLIENTE = {
   marca: "DuxFlow",
   nome: "Nome do cliente",
   instagram: "@cliente",
+  /** E-mail mostrado na política de privacidade (/privacidade). Vazio = não mostra. */
+  emailContato: "",
   urlProducao: "https://cliente.vercel.app",
 } as const;
 

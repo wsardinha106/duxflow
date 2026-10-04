@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 
-/** Caminhos que não exigem sessão. */
+/** Caminhos que não exigem sessão (a política de privacidade é exigida pela Meta). */
 export function caminhoPublico(pathname: string): boolean {
-  return pathname === "/login" || pathname.startsWith("/auth/") || pathname === "/api/cron/publicar";
+  return pathname === "/login" || pathname === "/privacidade" || pathname.startsWith("/auth/") || pathname === "/api/cron/publicar";
 }
 
 export async function proxy(request: NextRequest) {
