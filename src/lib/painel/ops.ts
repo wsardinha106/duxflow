@@ -14,6 +14,7 @@ import { CHAVES, gravarConfiguracoes, lerConfiguracoes } from "@/lib/servidor/co
 import { conectarToken } from "@/lib/servidor/token";
 import { abrirInstagram, publicarItemReservado, SemTokenError } from "@/lib/servidor/publicador";
 import { mascararMensagem } from "@/lib/regras/publicacao";
+import { apagarMidiasPublicadas } from "@/lib/servidor/armazenamento";
 import type { Conteudo, Status } from "@/lib/tipos";
 
 const TABELA = "conteudos_instagram";
@@ -191,6 +192,14 @@ export async function publicarAgora(id: string): Promise<{ ok: boolean; permalin
   return r.ok ? { ok: true, permalink: r.permalink, erro: null } : { ok: false, permalink: null, erro: r.erro };
 }
 
+/** Apaga do Storage os arquivos de tudo que já foi publicado (o cron já faz isso a cada publicação). */
+export async function liberarEspaco(): Promise<{ conteudos: number; arquivos: number }> {
+  const publicados = await lerTudo((a, b) =>
+    db().from(TABELA).select("id, tipo, midia_urls, capa_url").eq("status", "publicado").order("id").range(a, b),
+  );
+  return { conteudos: publicados.length, arquivos: await apagarMidiasPublicadas(db(), publicados) };
+}
+
 // ---------------------------------------------------------------------------
 // Conexões (§5). O token NUNCA sai daqui: só @, nome, foto e datas.
 // ---------------------------------------------------------------------------
@@ -284,6 +293,7 @@ export const OPS = {
   tentarDeNovo,
   editar,
   publicarAgora,
+  liberarEspaco,
   statusConexao,
   conectar,
   testarConexao,

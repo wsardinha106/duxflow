@@ -5,6 +5,7 @@ import { mascararMensagem, statusAposFalha, validarParaPublicar } from "@/lib/re
 import type { Conteudo } from "@/lib/tipos";
 import { CHAVES, gravarConfiguracoes, lerToken } from "./configuracoes";
 import { renovarTokenSeNecessario, type ResultadoRenovacao } from "./token";
+import { apagarMidiasPublicadas } from "./armazenamento";
 
 export type ResultadoItem =
   | { id: string; ok: true; permalink: string | null }
@@ -44,6 +45,12 @@ export async function publicarItemReservado(
       })
       .eq("id", item.id);
     if (error) console.error(`[publicador] publicado mas não gravou ${item.id}: ${error.message}`);
+    // Já está no Instagram: libera o espaço no Storage. Falhar aqui não desfaz a publicação.
+    try {
+      await apagarMidiasPublicadas(admin, [item]);
+    } catch (e) {
+      console.error(`[publicador] publicado, mas não apagou os arquivos de ${item.id}: ${e instanceof Error ? e.message : String(e)}`);
+    }
     return { id: item.id, ok: true, permalink: r.permalink };
   } catch (e) {
     const erro = mascararMensagem(e, token);

@@ -160,6 +160,40 @@ export function Conexoes() {
           </li>
         </ol>
       </details>
+
+      <LiberarEspaco />
     </div>
+  );
+}
+
+/** Apaga do Storage os arquivos do que já foi publicado (o publicador já faz isso a cada post). */
+function LiberarEspaco() {
+  const toast = useToast();
+  const [ocupado, setOcupado] = useState(false);
+
+  async function liberar() {
+    if (!window.confirm("Apagar do servidor os vídeos e fotos dos conteúdos já publicados? Eles continuam no Instagram.")) return;
+    setOcupado(true);
+    try {
+      const r = await op("liberarEspaco");
+      toast("sucesso", r.arquivos ? `${r.arquivos} arquivo(s) apagado(s) de ${r.conteudos} conteúdo(s) publicado(s).` : "Nada para apagar: o espaço já está livre.");
+    } catch (e) {
+      toast("erro", e instanceof Error ? e.message : String(e));
+    } finally {
+      setOcupado(false);
+    }
+  }
+
+  return (
+    <section className="rounded-2xl border border-zinc-200 bg-white p-5 text-sm">
+      <h2 className="font-semibold">Espaço no servidor</h2>
+      <p className="mt-1 text-zinc-600">
+        Depois que um conteúdo é publicado, o vídeo e as fotos são apagados do servidor automaticamente — fica só a miniatura do calendário. Use o botão
+        para limpar o que foi publicado antes disso.
+      </p>
+      <button type="button" disabled={ocupado} onClick={liberar} className="mt-3 rounded-xl border border-zinc-300 px-4 py-2 font-medium disabled:opacity-50">
+        {ocupado ? "Apagando…" : "Apagar arquivos dos já publicados"}
+      </button>
+    </section>
   );
 }

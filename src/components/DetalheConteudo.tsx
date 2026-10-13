@@ -114,6 +114,10 @@ export function DetalheConteudo({
                   </div>
                 )}
 
+                {c.status === "publicado" && (
+                  <p className="-mt-3 text-center text-xs text-zinc-500">Os arquivos foram apagados do servidor depois da publicação; o post completo está no Instagram.</p>
+                )}
+
                 {c.status === "publicado" && c.ig_permalink && (
                   <a href={c.ig_permalink} target="_blank" rel="noreferrer" className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white">
                     <IconeLink width={16} height={16} /> Ver no Instagram

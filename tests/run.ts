@@ -8,7 +8,7 @@ globalThis.fetch = (async (url: unknown) => {
   throw new Error(`Rede bloqueada nos testes (tentou acessar ${String(url)})`);
 }) as typeof fetch;
 
-const arquivos = ["estados", "legenda", "publicacao", "token", "datas", "instagram", "invariantes"];
+const arquivos = ["estados", "legenda", "publicacao", "armazenamento", "token", "datas", "instagram", "invariantes"];
 
 async function main() {
   let passouTotal = 0;
