@@ -36,6 +36,7 @@ async function executar(request: NextRequest) {
       publicados: resumo.publicados,
       falhas: resumo.falhas,
       renovacao: resumo.renovacao,
+      limpeza: resumo.limpeza,
       itens: resumo.itens,
     });
   } catch (e) {

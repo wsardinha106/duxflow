@@ -5,7 +5,7 @@ import { mascararMensagem, statusAposFalha, validarParaPublicar } from "@/lib/re
 import type { Conteudo } from "@/lib/tipos";
 import { CHAVES, gravarConfiguracoes, lerToken } from "./configuracoes";
 import { renovarTokenSeNecessario, type ResultadoRenovacao } from "./token";
-import { apagarMidiasPublicadas } from "./armazenamento";
+import { apagarMidiasPublicadas, limparPublicadosSeNecessario } from "./armazenamento";
 
 export type ResultadoItem =
   | { id: string; ok: true; permalink: string | null }
@@ -90,6 +90,7 @@ export async function abrirInstagram(
 
 export interface ResumoRodada {
   renovacao: ResultadoRenovacao;
+  limpeza: string;
   processados: number;
   publicados: number;
   falhas: number;
@@ -105,13 +106,14 @@ export class SemTokenError extends Error {
 /** Uma rodada do cron: renova o token se preciso, reserva e publica em sequência. */
 export async function rodadaDePublicacao(admin: SupabaseClient, opcoes: { fetch?: FetchLike } = {}): Promise<ResumoRodada> {
   const renovacao = await renovarTokenSeNecessario(admin, opcoes);
+  const limpeza = await limparPublicadosSeNecessario(admin);
   const token = await lerToken(admin);
   if (!token) throw new SemTokenError();
 
   const { data, error } = await admin.rpc("reservar_conteudos_para_publicar", { p_limite: 5 });
   if (error) throw new Error(`Falha ao reservar conteúdos: ${error.message}`);
   const reservados = (data ?? []) as Conteudo[];
-  if (!reservados.length) return { renovacao, processados: 0, publicados: 0, falhas: 0, itens: [] };
+  if (!reservados.length) return { renovacao, limpeza, processados: 0, publicados: 0, falhas: 0, itens: [] };
 
   let itens: ResultadoItem[] = [];
   let conexao: Awaited<ReturnType<typeof abrirInstagram>> = null;
@@ -126,5 +128,5 @@ export async function rodadaDePublicacao(admin: SupabaseClient, opcoes: { fetch?
     for (const item of reservados) itens.push(await publicarItemReservado(admin, conexao.ig, conexao.igUserId, item, conexao.token));
   }
   const publicados = itens.filter((i) => i.ok).length;
-  return { renovacao, processados: itens.length, publicados, falhas: itens.length - publicados, itens };
+  return { renovacao, limpeza, processados: itens.length, publicados, falhas: itens.length - publicados, itens };
 }

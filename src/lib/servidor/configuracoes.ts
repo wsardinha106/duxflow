@@ -13,6 +13,7 @@ export const CHAVES = {
   userId: "ig_user_id",
   erroToken: "ig_token_erro",
   cronSecret: "cron_secret",
+  limpezaEm: "storage_limpo_em",
 } as const;
 
 export type ChaveConfig = (typeof CHAVES)[keyof typeof CHAVES];
